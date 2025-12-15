@@ -2,4 +2,4 @@
 __pycache__/
 dist/
 build/
-danpy.egg-info/
+*.egg-info/
