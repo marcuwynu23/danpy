@@ -1,0 +1,105 @@
+# Monitoring and Observability Configuration
+# System monitoring, logging, and metrics
+
+# Metrics collection
+metrics {
+  provider: prometheus
+  port: 9090
+  scrape_interval: 15
+  
+  # Metric definitions
+  collected_metrics: table(name, type, description, labels) [
+    http_requests_total, counter, "Total HTTP requests", "[method, endpoint, status]"
+    http_request_duration, histogram, "HTTP request duration", "[method, endpoint]"
+    cpu_usage, gauge, "CPU usage percentage", "[host, core]"
+    memory_usage, gauge, "Memory usage in bytes", "[host, type]"
+    database_connections, gauge, "Active database connections", "[database, pool]"
+    cache_hits, counter, "Cache hit count", "[cache_name, key_pattern]"
+  ]
+  
+  # Alert rules
+  alerts: table(name, expr, severity, duration, summary, description) [
+    high_cpu, "cpu_usage > 80", critical, 5m, "High CPU usage", "CPU usage above 80% for 5 minutes"
+    high_memory, "memory_usage > 90", warning, 10m, "High memory usage", "Memory usage above 90%"
+    slow_requests, "http_request_duration > 1", warning, 5m, "Slow HTTP requests", "HTTP requests taking more than 1 second"
+    db_connection_pool_exhausted, "database_connections > 90", critical, 2m, "DB pool exhausted", "Database connection pool nearly exhausted"
+  ]
+}
+
+# Logging configuration
+logging {
+  provider: elk
+  
+  # Log sources
+  sources: table(name, type, path, parser, level) [
+    application, file, "/var/log/app/app.log", json, info
+    nginx, file, "/var/log/nginx/access.log", nginx, info
+    database, file, "/var/log/postgresql/postgresql.log", postgresql, warning
+    system, syslog, "/var/log/syslog", syslog, error
+  ]
+  
+  # Log aggregation
+  aggregation {
+    elasticsearch: "https://logs.example.com:9200"
+    index_pattern: "logs-*"
+    retention_days: 30
+    shards: 5
+    replicas: 1
+  }
+  
+  # Log levels
+  levels: [debug, info, warning, error, critical]
+  
+  # Structured logging
+  structured {
+    enabled: true
+    format: json
+    include_fields: "[timestamp, level, message, service, host, trace_id]"
+  }
+}
+
+# Distributed tracing
+tracing {
+  provider: jaeger
+  endpoint: "https://tracing.example.com"
+  sample_rate: 0.1
+  
+  # Trace context propagation
+  propagation {
+    format: w3c
+    headers: "[traceparent, tracestate]"
+  }
+  
+  # Instrumented services
+  services: table(name, instrumented, spans_collected) [
+    web-server, true, "[http, database, cache]"
+    api-server, true, "[http, rpc, database]"
+    worker, true, "[queue, database, external_api]"
+    payment-service, true, "[http, database, payment_gateway]"
+  ]
+}
+
+# Health checks
+health_checks: table(service, endpoint, interval, timeout, expected_status) [
+  web-server, "/health", 30, 5, 200
+  api-server, "/api/health", 30, 5, 200
+  database, "/health", 60, 10, 200
+  cache, "/ping", 30, 2, PONG
+]
+
+# Dashboards
+dashboards: table(name, type, widgets, refresh_interval) [
+  system_overview, grafana, "[cpu, memory, disk, network]", 30
+  application_metrics, grafana, "[requests, errors, latency, throughput]", 10
+  business_metrics, grafana, "[users, orders, revenue, conversions]", 60
+  infrastructure, grafana, "[servers, containers, databases, queues]", 30
+]
+
+# Notification channels
+notifications: table(name, type, endpoint, severity_levels) [
+  slack_alerts, slack, "https://hooks.slack.com/services/xxx", "[warning, critical]"
+  email_alerts, email, "alerts@example.com", "[critical]"
+  pagerduty, pagerduty, "https://api.pagerduty.com/xxx", "[critical]"
+  webhook, http, "https://hooks.example.com/monitoring", "[warning, critical]"
+]
+

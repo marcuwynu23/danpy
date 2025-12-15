@@ -1,0 +1,80 @@
+# CI/CD Pipeline Configuration
+# Continuous Integration and Deployment settings
+
+pipeline {
+  name: "Build and Deploy"
+  version: 2.0
+  
+  # Build stages
+  stages: table(name, commands, parallel, timeout, on_failure) [
+    install, "npm install, pip install -r requirements.txt", false, 600, stop
+    lint, "npm run lint, pylint src/", false, 300, continue
+    test, "npm test, pytest tests/", false, 1800, stop
+    build, "npm run build, docker build -t app:latest .", false, 1200, stop
+    security_scan, "npm audit, bandit -r src/", true, 600, continue
+    deploy_staging, "deploy.sh staging", false, 900, stop
+    smoke_tests, "test/staging/smoke.sh", false, 300, stop
+    deploy_prod, "deploy.sh production", true, 900, stop
+  ]
+  
+  # Environment configurations
+  environments {
+    development {
+      url: "http://localhost:3000"
+      auto_deploy: true
+      requires_approval: false
+      database: "dev_db"
+    }
+    
+    staging {
+      url: "https://staging.example.com"
+      auto_deploy: true
+      requires_approval: false
+      database: "staging_db"
+      health_check: "/health"
+    }
+    
+    production {
+      url: "https://example.com"
+      auto_deploy: false
+      requires_approval: true
+      database: "prod_db"
+      health_check: "/health"
+      rollback_enabled: true
+    }
+  }
+  
+  # Notification settings
+  notifications {
+    slack {
+      enabled: true
+      webhook: "https://hooks.slack.com/services/xxx"
+      channels: "[#deployments, #alerts]"
+    }
+    
+    email {
+      enabled: true
+      recipients: "[devops@example.com, team@example.com]"
+      on_failure_only: true
+    }
+    
+    webhook: "https://hooks.example.com/ci"
+  }
+  
+  # Artifact storage
+  artifacts {
+    storage: s3
+    bucket: "ci-artifacts"
+    retention_days: 30
+    include: "[build/, dist/, coverage/]"
+  }
+  
+  # Build triggers
+  triggers {
+    on_push: true
+    on_pull_request: true
+    on_tag: true
+    branches: "[main, develop, release/*]"
+  }
+}
+

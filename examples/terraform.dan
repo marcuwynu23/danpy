@@ -1,0 +1,75 @@
+# Terraform-like Infrastructure as Code in DAN format
+# Cloud infrastructure definitions
+
+# Provider configuration
+providers: table(name, region, version) [
+  aws, us-east-1, "~> 4.0"
+  azure, eastus, "~> 3.0"
+  gcp, us-central1, "~> 4.0"
+]
+
+# VPC/Network configuration
+networks: table(name, cidr, subnets, availability_zones) [
+  main-vpc, "10.0.0.0/16", "[10.0.1.0/24, 10.0.2.0/24, 10.0.3.0/24]", "[us-east-1a, us-east-1b, us-east-1c]"
+]
+
+# Compute resources
+instances: table(name, type, ami, subnet, security_groups) [
+  web-server-1, t3.medium, ami-12345, 10.0.1.0/24, "[sg-web, sg-ssh]"
+  web-server-2, t3.medium, ami-12345, 10.0.2.0/24, "[sg-web, sg-ssh]"
+  app-server-1, t3.large, ami-67890, 10.0.1.0/24, "[sg-app, sg-db]"
+  db-server-1, db.t3.medium, ami-db-123, 10.0.3.0/24, "[sg-db]"
+]
+
+# Load balancers
+load_balancers: table(name, type, subnets, listeners) [
+  web-lb, application, "[10.0.1.0/24, 10.0.2.0/24]", "[80:HTTP, 443:HTTPS]"
+  app-lb, network, "[10.0.1.0/24]", "[3000:TCP]"
+]
+
+# Security groups
+security_groups: table(name, ingress_rules, egress_rules) [
+  sg-web, "[80:0.0.0.0/0, 443:0.0.0.0/0]", "[0.0.0.0/0:all]"
+  sg-app, "[3000:10.0.0.0/16]", "[10.0.0.0/16:all]"
+  sg-db, "[5432:10.0.0.0/16]", "[10.0.0.0/16:all]"
+  sg-ssh, "[22:0.0.0.0/0]", "[0.0.0.0/0:all]"
+]
+
+# Storage
+storage: table(name, type, size, encrypted, backup_enabled) [
+  db-storage, ebs, 100, true, true
+  app-logs, s3, unlimited, true, true
+  backups, s3, unlimited, true, false
+]
+
+# DNS and CDN
+dns {
+  domain: example.com
+  
+  records: table(name, type, value, ttl) [
+    @, A, web-lb.dns, 300
+    www, CNAME, example.com, 300
+    api, CNAME, app-lb.dns, 300
+  ]
+  
+  cdn {
+    enabled: true
+    origin: web-lb.dns
+    cache_policy: aggressive
+  }
+}
+
+# Monitoring and alerts
+monitoring {
+  cloudwatch {
+    enabled: true
+    retention_days: 30
+  }
+  
+  alerts: table(name, metric, threshold, action) [
+    high-cpu, CPUUtilization, 80, "scale-up"
+    low-memory, MemoryUtilization, 20, "scale-down"
+    db-connections, DatabaseConnections, 90, "alert-admin"
+  ]
+}
+

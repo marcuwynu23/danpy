@@ -1,0 +1,67 @@
+# Kubernetes Configuration in DAN format
+# K8s resource definitions
+
+# Deployment configurations
+deployments: table(name, replicas, image, ports, env_vars) [
+  web-app, 3, "myapp:1.2.0", "[80, 443]", "[NODE_ENV=production, DB_HOST=postgres]"
+  api-server, 5, "api:2.0.1", "[3000]", "[NODE_ENV=production, REDIS_HOST=redis]"
+  worker, 2, "worker:1.5.0", "[]", "[QUEUE=default, REDIS_HOST=redis]"
+]
+
+# Service definitions
+services: table(name, type, selector, ports) [
+  web-service, LoadBalancer, web-app, "[80:80, 443:443]"
+  api-service, ClusterIP, api-server, "[3000:3000]"
+  worker-service, ClusterIP, worker, "[]"
+]
+
+# ConfigMaps
+configmaps: table(name, data) [
+  app-config, "database_url: postgresql://db:5432/myapp, redis_url: redis://redis:6379"
+  nginx-config, "server_name: example.com, ssl_cert: /etc/ssl/cert.pem"
+]
+
+# Secrets (references only, not actual secrets)
+secrets: table(name, keys) [
+  db-credentials, "[username, password]"
+  api-keys, "[jwt_secret, api_key]"
+  ssl-certs, "[cert, key]"
+]
+
+# Persistent volumes
+volumes: table(name, size, storage_class, access_mode) [
+  postgres-data, 50Gi, ssd, ReadWriteOnce
+  redis-data, 10Gi, standard, ReadWriteOnce
+  app-logs, 20Gi, standard, ReadWriteMany
+]
+
+# Ingress rules
+ingress {
+  host: example.com
+  
+  rules: table(path, service, port, tls) [
+    /, web-service, 80, false
+    /api, api-service, 3000, true
+    /admin, web-service, 80, true
+  ]
+  
+  tls {
+    enabled: true
+    secret_name: tls-secret
+  }
+}
+
+# Resource limits
+resources: table(deployment, cpu_request, cpu_limit, memory_request, memory_limit) [
+  web-app, "100m", "500m", "128Mi", "512Mi"
+  api-server, "200m", "1000m", "256Mi", "1Gi"
+  worker, "100m", "500m", "128Mi", "512Mi"
+]
+
+# Autoscaling
+autoscaling: table(deployment, min_replicas, max_replicas, target_cpu) [
+  web-app, 2, 10, 70
+  api-server, 3, 20, 70
+  worker, 1, 5, 80
+]
+

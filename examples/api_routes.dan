@@ -1,0 +1,58 @@
+# API Routes Configuration
+# RESTful API route definitions
+
+# Route definitions
+routes: table(method, path, controller, action, middleware, auth_required) [
+  GET, "/api/users", UserController, index, "[]", false
+  GET, "/api/users/:id", UserController, show, "[]", true
+  POST, "/api/users", UserController, create, "[validate]", true
+  PUT, "/api/users/:id", UserController, update, "[validate, ownership]", true
+  DELETE, "/api/users/:id", UserController, destroy, "[ownership]", true
+  
+  GET, "/api/posts", PostController, index, "[]", false
+  GET, "/api/posts/:id", PostController, show, "[]", false
+  POST, "/api/posts", PostController, create, "[validate]", true
+  PUT, "/api/posts/:id", PostController, update, "[validate, ownership]", true
+  DELETE, "/api/posts/:id", PostController, destroy, "[ownership]", true
+  
+  POST, "/api/auth/login", AuthController, login, "[throttle]", false
+  POST, "/api/auth/register", AuthController, register, "[validate, throttle]", false
+  POST, "/api/auth/logout", AuthController, logout, "[auth]", true
+  GET, "/api/auth/me", AuthController, me, "[auth]", true
+]
+
+# Middleware definitions
+middleware {
+  auth: "AuthMiddleware"
+  validate: "ValidationMiddleware"
+  ownership: "OwnershipMiddleware"
+  throttle: "RateLimitMiddleware"
+  admin: "AdminMiddleware"
+}
+
+# Rate limiting
+rate_limits {
+  default {
+    requests: 100
+    window: 3600
+  }
+  
+  auth {
+    requests: 5
+    window: 300
+  }
+  
+  api {
+    requests: 1000
+    window: 3600
+  }
+}
+
+# CORS configuration
+cors {
+  allowed_origins: ["https://example.com", "https://app.example.com"]
+  allowed_methods: "[GET, POST, PUT, DELETE, OPTIONS]"
+  allowed_headers: "[Content-Type, Authorization]"
+  max_age: 86400
+}
+

@@ -1,0 +1,61 @@
+# Game Configuration
+# RPG game settings and data
+
+game {
+  title: "Adventure Quest"
+  version: 1.5.2
+  max_players: 100
+  
+  # Player settings
+  player {
+    max_health: 100
+    starting_level: 1
+    starting_gold: 50
+    experience_curve: [100, 250, 500, 1000, 2000, 4000, 8000, 16000]
+    stat_points_per_level: 5
+  }
+  
+  # Item definitions
+  items: table(id, name, type, value, rarity, stats) [
+    1, "Iron Sword", weapon, 50, common, "attack: 10"
+    2, "Steel Sword", weapon, 150, uncommon, "attack: 20"
+    3, "Dragon Blade", weapon, 1000, legendary, "attack: 50, crit_chance: 0.15"
+    4, "Leather Armor", armor, 30, common, "defense: 5"
+    5, "Plate Armor", armor, 200, rare, "defense: 25"
+    6, "Health Potion", consumable, 20, common, "heal: 50"
+    7, "Mana Potion", consumable, 25, common, "mana: 50"
+    8, "Dragon Scale", material, 500, legendary, "crafting: true"
+  ]
+  
+  # Enemy definitions
+  enemies: table(id, name, health, damage, experience, gold_drop, loot_table) [
+    1, Goblin, 30, 5, 10, 5, "[1, 6]"
+    2, Orc, 60, 10, 25, 15, "[2, 6]"
+    3, Troll, 120, 15, 50, 30, "[2, 4, 7]"
+    4, Dragon, 200, 30, 100, 100, "[3, 5, 8]"
+  ]
+  
+  # Quest definitions
+  quests: table(id, name, description, reward_exp, reward_gold, required_level) [
+    1, "Goblin Slayer", "Defeat 10 goblins", 100, 50, 1
+    2, "Dragon's Lair", "Defeat the ancient dragon", 500, 200, 10
+    3, "Collector", "Gather 20 dragon scales", 300, 150, 5
+  ]
+  
+  # World settings
+  world {
+    name: "Aetheria"
+    regions: [Forest, Mountains, Desert, Dungeon, Castle]
+    day_night_cycle: true
+    weather_enabled: true
+  }
+  
+  # Combat settings
+  combat {
+    turn_based: true
+    max_turns: 50
+    crit_multiplier: 2.0
+    dodge_chance_base: 0.05
+  }
+}
+

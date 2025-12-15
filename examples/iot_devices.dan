@@ -1,0 +1,79 @@
+# IoT Device Configuration
+# Internet of Things device management
+
+# Device registry
+devices: table(id, name, type, location, status, last_seen) [
+  sensor-001, "Temperature Sensor 1", temperature, "Building A - Floor 1", online, "2024-01-15T10:30:00Z"
+  sensor-002, "Temperature Sensor 2", temperature, "Building A - Floor 2", online, "2024-01-15T10:29:45Z"
+  sensor-003, "Humidity Sensor 1", humidity, "Building A - Floor 1", offline, "2024-01-15T09:15:00Z"
+  motion-001, "Motion Detector 1", motion, "Building A - Entrance", online, "2024-01-15T10:30:15Z"
+  camera-001, "Security Camera 1", camera, "Building A - Lobby", online, "2024-01-15T10:30:00Z"
+  light-001, "Smart Light 1", light, "Building A - Room 101", online, "2024-01-15T10:29:30Z"
+]
+
+# Device types and capabilities
+device_types: table(type, protocol, data_format, update_interval, battery_powered) [
+  temperature, mqtt, json, 60, true
+  humidity, mqtt, json, 60, true
+  motion, mqtt, json, 5, false
+  camera, http, jpeg, 30, false
+  light, zigbee, binary, 1, false
+  door_lock, zigbee, binary, 1, false
+]
+
+# Sensor configurations
+sensor_configs: table(device_id, min_value, max_value, alert_threshold, unit) [
+  sensor-001, -10, 50, 40, celsius
+  sensor-002, -10, 50, 40, celsius
+  sensor-003, 0, 100, 80, percent
+]
+
+# Automation rules
+automation_rules: table(name, trigger, condition, action, enabled) [
+  high_temp_alert, "sensor-001 > 40", "temperature > 40", "send_alert, turn_on_ac", true
+  motion_lights, "motion-001 detected", "time between 18:00 and 06:00", "turn_on light-001", true
+  security_mode, "motion-001 detected", "time between 22:00 and 06:00", "record_camera, send_alert", true
+]
+
+# Gateway configuration
+gateway {
+  id: gateway-001
+  location: "Building A - Server Room"
+  protocol: mqtt
+  broker: "mqtt.example.com"
+  port: 1883
+  ssl: true
+  
+  connected_devices: "[sensor-001, sensor-002, sensor-003, motion-001, light-001]"
+  
+  data_retention {
+    local: 7
+    cloud: 365
+  }
+}
+
+# Alert configuration
+alerts {
+  email {
+    enabled: true
+    recipients: "[admin@example.com, security@example.com]"
+  }
+  
+  sms {
+    enabled: true
+    recipients: "[+1234567890]"
+    critical_only: true
+  }
+  
+  webhook: "https://hooks.example.com/iot"
+}
+
+# Data collection
+data_collection {
+  interval: 60
+  batch_size: 100
+  storage: cloud
+  compression: true
+  encryption: true
+}
+

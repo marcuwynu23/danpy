@@ -1,0 +1,48 @@
+# Sample DAN configuration file
+# This demonstrates various DAN features
+
+app {
+  name: "Sample Application"
+  version: 1.0.0
+  environment: production
+
+  # Server configuration
+  server {
+    host: localhost
+    port: 3000
+    ssl: false
+  }
+
+  # Database settings
+  database {
+    type: postgresql
+    host: db.example.com
+    port: 5432
+    name: myapp
+  }
+}
+
+# Feature flags
+features {
+  authentication: true
+  analytics: false
+  logging: true
+}
+
+# User roles
+roles: [admin, user, guest]
+
+# Application users
+users: table(id, username, email, role, active) [
+  1, alice, "alice@example.com", admin, true
+  2, bob, "bob@example.com", user, true
+  3, charlie, "charlie@example.com", guest, false
+]
+
+# API endpoints
+endpoints: table(method, path, handler, auth) [
+  GET, "/api/users", getUsers, true
+  POST, "/api/users", createUser, true
+  GET, "/api/public", getPublic, false
+]
+

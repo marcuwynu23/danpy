@@ -1,0 +1,86 @@
+# Microservices Architecture Configuration
+# Service definitions and inter-service communication
+
+# Service registry
+services: table(name, port, version, health_endpoint, dependencies) [
+  auth-service, 3001, 1.2.0, "/health", "[]"
+  user-service, 3002, 2.0.1, "/health", "[auth-service]"
+  order-service, 3003, 1.5.0, "/health", "[auth-service, user-service]"
+  payment-service, 3004, 1.0.0, "/health", "[auth-service, order-service]"
+  inventory-service, 3005, 1.3.0, "/health", "[auth-service]"
+  notification-service, 3006, 1.1.0, "/health", "[auth-service]"
+]
+
+# API Gateway configuration
+gateway {
+  port: 8080
+  name: api-gateway
+  
+  # Route definitions
+  routes: table(service, path, methods, rate_limit, auth_required) [
+    auth-service, "/api/auth", "[POST, GET]", 100, false
+    user-service, "/api/users", "[GET, POST, PUT, DELETE]", 1000, true
+    order-service, "/api/orders", "[GET, POST, PUT]", 500, true
+    payment-service, "/api/payments", "[POST, GET]", 200, true
+    inventory-service, "/api/inventory", "[GET, POST, PUT]", 1000, true
+    notification-service, "/api/notifications", "[GET, POST]", 500, true
+  ]
+  
+  # Load balancing
+  load_balancer {
+    algorithm: round_robin
+    health_check_interval: 30
+    timeout: 5000
+  }
+}
+
+# Service discovery
+service_discovery {
+  type: consul
+  host: consul.example.com
+  port: 8500
+  health_check_interval: 10
+}
+
+# Message queue configuration
+message_queue {
+  provider: rabbitmq
+  host: mq.example.com
+  port: 5672
+  exchanges: table(name, type, durable) [
+    events, topic, true
+    commands, direct, true
+    notifications, fanout, true
+  ]
+}
+
+# Database per service
+databases: table(service, type, host, name) [
+  auth-service, postgresql, db1.example.com, auth_db
+  user-service, postgresql, db2.example.com, user_db
+  order-service, postgresql, db3.example.com, order_db
+  payment-service, postgresql, db4.example.com, payment_db
+  inventory-service, mongodb, db5.example.com, inventory_db
+]
+
+# Monitoring and observability
+monitoring {
+  metrics {
+    provider: prometheus
+    port: 9090
+    scrape_interval: 15
+  }
+  
+  logging {
+    provider: elk
+    elasticsearch: "https://logs.example.com:9200"
+    log_level: info
+  }
+  
+  tracing {
+    provider: jaeger
+    endpoint: "https://tracing.example.com"
+    sample_rate: 0.1
+  }
+}
+

@@ -1,0 +1,181 @@
+# Security Policy Configuration
+# Security settings, access control, and compliance
+
+# Authentication configuration
+authentication {
+  provider: jwt
+  algorithm: HS256
+  secret_rotation_days: 90
+  token_expiry: 3600
+  refresh_token_expiry: 86400
+  
+  # Password policy
+  password_policy {
+    min_length: 12
+    require_uppercase: true
+    require_lowercase: true
+    require_numbers: true
+    require_special: true
+    max_age_days: 90
+    history_count: 5
+  }
+  
+  # Multi-factor authentication
+  mfa {
+    enabled: true
+    required_for_admins: true
+    methods: "[totp, sms, email]"
+    backup_codes: 10
+  }
+  
+  # Session management
+  sessions {
+    max_concurrent: 3
+    timeout: 1800
+    secure_cookies: true
+    http_only: true
+    same_site: strict
+  }
+}
+
+# Authorization and access control
+authorization {
+  # Role definitions
+  roles: table(name, permissions, inherits_from) [
+    admin, "[*]", "[]"
+    manager, "[read:*, write:users, write:orders]", "[user]"
+    user, "[read:own, write:own]", "[]"
+    guest, "[read:public]", "[]"
+  ]
+  
+  # Permission matrix
+  permissions: table(resource, actions, conditions) [
+    users, "[read, write, delete]", "role:admin OR owner"
+    orders, "[read, write]", "role:admin OR role:manager OR owner"
+    products, "[read]", "[]"
+    admin_panel, "[access]", "role:admin"
+  ]
+  
+  # Resource-based access control
+  rbac {
+    enabled: true
+    default_policy: deny
+    evaluation_order: "[explicit_allow, role_based, resource_based, default]"
+  }
+}
+
+# Security headers
+security_headers {
+  content_security_policy: "default-src 'self'; script-src 'self' 'unsafe-inline'"
+  x_frame_options: DENY
+  x_content_type_options: nosniff
+  strict_transport_security: "max-age=31536000; includeSubDomains"
+  referrer_policy: strict-origin-when-cross-origin
+}
+
+# Encryption
+encryption {
+  data_at_rest: true
+  data_in_transit: true
+  algorithm: AES-256-GCM
+  key_rotation_days: 90
+  
+  # Encrypted fields
+  encrypted_fields: table(table, fields) [
+    users, "[password, ssn, credit_card]"
+    orders, "[payment_info, shipping_address]"
+    messages, "[content, attachments]"
+  ]
+}
+
+# Network security
+network_security {
+  firewall {
+    enabled: true
+    default_policy: deny
+    allowed_ports: "[80, 443, 22]"
+  }
+  
+  # IP whitelisting
+  ip_whitelist: table(service, ips) [
+    admin_panel, "[192.168.1.0/24, 10.0.0.0/8]"
+    api, "[0.0.0.0/0]"
+    database, "[10.0.0.0/16]"
+  ]
+  
+  # Rate limiting
+  rate_limits: table(endpoint, requests_per_minute, burst) [
+    /api/auth/login, 5, 10
+    /api/auth/register, 3, 5
+    /api/*, 100, 200
+    /admin/*, 50, 100
+  ]
+}
+
+# Vulnerability management
+vulnerability_scanning {
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  tools: "[snyk, npm-audit, pip-audit, trivy]"
+  auto_patch: false
+  alert_on_critical: true
+}
+
+# Compliance
+compliance {
+  gdpr {
+    enabled: true
+    data_retention_days: 2555  # 7 years
+    right_to_deletion: true
+    data_export: true
+  }
+  
+  hipaa {
+    enabled: false
+    encryption_required: true
+    audit_logging: true
+  }
+  
+  pci_dss {
+    enabled: true
+    level: 1
+    encryption_required: true
+    network_segmentation: true
+  }
+}
+
+# Audit logging
+audit_logs {
+  enabled: true
+  events: table(event, log_level, include_pii) [
+    login, info, false
+    logout, info, false
+    permission_denied, warning, false
+    data_access, info, true
+    data_modification, warning, true
+    admin_action, warning, true
+    security_violation, error, true
+  ]
+  
+  retention_days: 2555
+  storage: encrypted
+}
+
+# Incident response
+incident_response {
+  auto_block_on_violation: true
+  violation_threshold: 5
+  block_duration_minutes: 60
+  
+  # Alert channels
+  alert_channels: "[security@example.com, +1234567890, slack#security]"
+  
+  # Response procedures
+  procedures: table(severity, response_time, escalation) [
+    critical, 15, immediate
+    high, 60, 30_minutes
+    medium, 240, 4_hours
+    low, 1440, 24_hours
+  ]
+}
+

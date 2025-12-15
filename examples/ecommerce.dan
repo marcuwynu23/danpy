@@ -1,0 +1,67 @@
+# E-commerce Platform Configuration
+# Online store configuration and settings
+
+store {
+  name: "Awesome Store"
+  domain: "store.example.com"
+  currency: USD
+  tax_rate: 0.08
+  
+  # Product catalog
+  products: table(id, name, sku, price, category, stock, featured) [
+    1, "Wireless Headphones", WH-001, 99.99, Electronics, 50, true
+    2, "Smart Watch", SW-002, 249.99, Electronics, 30, true
+    3, "Coffee Maker", CM-003, 79.99, Home, 25, false
+    4, "Running Shoes", RS-004, 129.99, Sports, 100, true
+    5, "Yoga Mat", YM-005, 29.99, Sports, 200, false
+  ]
+  
+  # Categories
+  categories: table(id, name, slug, parent_id) [
+    1, Electronics, electronics, null
+    2, Home, home, null
+    3, Sports, sports, null
+    4, Audio, audio, 1
+    5, Wearables, wearables, 1
+  ]
+  
+  # Shipping options
+  shipping: table(method, cost, delivery_days, free_over) [
+    standard, 5.99, 5, 50.00
+    express, 12.99, 2, 100.00
+    overnight, 24.99, 1, 200.00
+  ]
+  
+  # Payment methods
+  payment_methods: table(name, enabled, fee_percent, min_amount) [
+    credit_card, true, 2.9, 0.00
+    paypal, true, 3.4, 0.00
+    bank_transfer, true, 0.0, 100.00
+    cryptocurrency, false, 1.0, 0.00
+  ]
+  
+  # Discount codes
+  discounts: table(code, type, value, min_purchase, expires) [
+    WELCOME10, percentage, 10, 0.00, "2024-12-31"
+    SAVE20, percentage, 20, 50.00, "2024-06-30"
+    FREESHIP, fixed, 5.99, 25.00, "2024-12-31"
+  ]
+  
+  # Customer service
+  customer_service {
+    email: "support@store.example.com"
+    phone: "+1-800-123-4567"
+    hours: "9:00 AM - 6:00 PM EST"
+    live_chat: true
+    return_days: 30
+  }
+  
+  # Inventory management
+  inventory {
+    low_stock_threshold: 10
+    auto_reorder: true
+    reorder_quantity: 50
+    warehouse_locations: "[NYC, LA, CHI]"
+  }
+}
+

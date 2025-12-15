@@ -1,0 +1,82 @@
+# Application Configuration File
+# This demonstrates a typical application configuration
+
+app {
+  name: "My Application"
+  version: 2.1.0
+  environment: production
+  debug: false
+  
+  # Server settings
+  server {
+    host: 0.0.0.0
+    port: 8080
+    ssl: true
+    ssl_cert: "/etc/ssl/cert.pem"
+    ssl_key: "/etc/ssl/key.pem"
+  }
+  
+  # Database configuration
+  database {
+    type: postgresql
+    host: db.example.com
+    port: 5432
+    name: myapp_prod
+    user: app_user
+    pool_size: 20
+    timeout: 30
+  }
+  
+  # Logging configuration
+  logging {
+    level: info
+    file: "/var/log/app.log"
+    max_size: 10485760
+    backup_count: 5
+    format: json
+  }
+  
+  # Cache settings
+  cache {
+    enabled: true
+    type: redis
+    host: cache.example.com
+    port: 6379
+    ttl: 3600
+    max_entries: 10000
+  }
+  
+  # Feature flags
+  features {
+    authentication: true
+    analytics: true
+    logging: true
+    monitoring: true
+    rate_limiting: true
+  }
+}
+
+# External services
+services {
+  email {
+    provider: sendgrid
+    api_key: "SG.xxx"
+    from_address: "noreply@example.com"
+  }
+  
+  storage {
+    provider: s3
+    bucket: "myapp-storage"
+    region: us-east-1
+  }
+}
+
+# Security settings
+security {
+  jwt_secret: "your-secret-key"
+  jwt_expiry: 3600
+  password_min_length: 8
+  require_2fa: false
+  allowed_origins: ["https://example.com", "https://www.example.com"]
+}
+

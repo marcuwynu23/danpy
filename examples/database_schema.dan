@@ -1,0 +1,48 @@
+# Database Schema Definition
+# This demonstrates how to define database schemas using DAN
+
+# Table definitions
+tables: table(name, columns, primary_key, indexes) [
+  users, "id, username, email, password_hash, created_at, updated_at", id, "[username, email]"
+  posts, "id, title, content, user_id, created_at, updated_at", id, "[user_id, created_at]"
+  comments, "id, post_id, user_id, content, created_at", id, "[post_id, user_id]"
+  categories, "id, name, slug, description", id, "[slug]"
+  tags, "id, name, slug", id, "[slug]"
+  post_tags, "post_id, tag_id", "post_id, tag_id", "[]"
+]
+
+# Relationships
+relationships: table(from_table, to_table, type, foreign_key, on_delete) [
+  posts, users, many_to_one, user_id, CASCADE
+  comments, posts, many_to_one, post_id, CASCADE
+  comments, users, many_to_one, user_id, CASCADE
+  post_tags, posts, many_to_one, post_id, CASCADE
+  post_tags, tags, many_to_one, tag_id, CASCADE
+]
+
+# Data types mapping
+types {
+  integer: "INTEGER"
+  string: "VARCHAR(255)"
+  text: "TEXT"
+  boolean: "BOOLEAN"
+  timestamp: "TIMESTAMP"
+  decimal: "DECIMAL(10, 2)"
+}
+
+# Seed data
+seed_data {
+  categories: table(id, name, slug) [
+    1, Technology, technology
+    2, Science, science
+    3, Arts, arts
+  ]
+  
+  admin_user {
+    id: 1
+    username: admin
+    email: "admin@example.com"
+    role: admin
+  }
+}
+

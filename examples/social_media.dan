@@ -1,0 +1,90 @@
+# Social Media Platform Configuration
+# Social network settings and features
+
+platform {
+  name: "ConnectHub"
+  version: 3.2.1
+  
+  # User features
+  features {
+    posts: true
+    stories: true
+    live_streaming: true
+    messaging: true
+    groups: true
+    events: true
+    marketplace: false
+  }
+  
+  # Content types
+  content_types: table(type, max_size_mb, allowed_formats, moderation_required) [
+    image, 10, "[jpg, png, gif, webp]", false
+    video, 100, "[mp4, webm]", true
+    audio, 25, "[mp3, wav, ogg]", false
+    document, 50, "[pdf, doc, docx]", false
+  ]
+  
+  # Post settings
+  posts {
+    max_length: 5000
+    allow_editing: true
+    edit_time_limit: 300
+    allow_deletion: true
+    max_hashtags: 30
+    max_mentions: 50
+  }
+  
+  # Privacy settings
+  privacy {
+    default_visibility: public
+    options: "[public, friends, private]"
+    allow_custom_visibility: true
+    data_retention_days: 2555
+    gdpr_compliant: true
+  }
+  
+  # Moderation
+  moderation {
+    auto_moderation: true
+    ai_content_filter: true
+    profanity_filter: true
+    spam_detection: true
+    report_threshold: 3
+    review_queue_size: 100
+  }
+  
+  # User roles
+  roles: table(name, permissions, color) [
+    admin, "[*]", red
+    moderator, "[delete_posts, ban_users, view_reports]", orange
+    verified, "[verified_badge, priority_support]", blue
+    user, "[create_posts, comment, like]", gray
+  ]
+  
+  # Engagement metrics
+  metrics {
+    track_views: true
+    track_likes: true
+    track_shares: true
+    track_comments: true
+    track_time_spent: true
+    analytics_dashboard: true
+  }
+  
+  # Notification settings
+  notifications {
+    email: true
+    push: true
+    sms: false
+    in_app: true
+    
+    types: table(type, default_enabled, channels) [
+      new_follower, true, "[push, in_app]"
+      post_like, true, "[push, in_app]"
+      post_comment, true, "[email, push, in_app]"
+      mention, true, "[email, push, in_app]"
+      message, true, "[push, in_app]"
+    ]
+  }
+}
+

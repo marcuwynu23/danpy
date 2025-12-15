@@ -1,0 +1,65 @@
+# Docker Compose Configuration in DAN format
+# Container orchestration definitions
+
+services: table(name, image, ports, environment, volumes, depends_on) [
+  web, "nginx:alpine", "80:80, 443:443", "[]", "[./nginx.conf:/etc/nginx/nginx.conf]", "[app]"
+  app, "myapp:latest", "3000:3000", "[NODE_ENV=production, DB_HOST=db]", "[./app:/app]", "[db, redis]"
+  db, "postgres:14", "5432:5432", "[POSTGRES_DB=myapp, POSTGRES_USER=user]", "[db_data:/var/lib/postgresql/data]", "[]"
+  redis, "redis:7-alpine", "6379:6379", "[]", "[redis_data:/data]", "[]"
+  worker, "myapp:latest", "[]", "[NODE_ENV=production, QUEUE=default]", "[./app:/app]", "[db, redis]"
+]
+
+# Network configuration
+networks {
+  frontend {
+    driver: bridge
+    subnet: "172.20.0.0/16"
+  }
+  
+  backend {
+    driver: bridge
+    subnet: "172.21.0.0/16"
+  }
+}
+
+# Volume definitions
+volumes {
+  db_data {
+    driver: local
+  }
+  
+  redis_data {
+    driver: local
+  }
+  
+  app_logs {
+    driver: local
+  }
+}
+
+# Resource limits
+resources {
+  app {
+    cpus: "2.0"
+    memory: "2G"
+    memory_reservation: "1G"
+  }
+  
+  db {
+    cpus: "1.0"
+    memory: "1G"
+  }
+  
+  worker {
+    cpus: "1.0"
+    memory: "512M"
+  }
+}
+
+# Health checks
+health_checks: table(service, test, interval, timeout, retries) [
+  app, "curl -f http://localhost:3000/health || exit 1", 30, 10, 3
+  db, "pg_isready -U user", 10, 5, 5
+  redis, "redis-cli ping", 10, 5, 3
+]
+
