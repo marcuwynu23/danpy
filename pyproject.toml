@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.7"
 authors = [
-    {name = "DAN Python Library"}
+    { name = "DAN Python Library" },
 ]
 keywords = ["dan", "parser", "encoder", "data-format", "configuration", "config"]
 classifiers = [
@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Text Processing :: Markup",
     "Topic :: Utilities",
@@ -33,7 +34,7 @@ Documentation = "https://github.com/marcuwynu23/danpy#readme"
 "Issue Tracker" = "https://github.com/marcuwynu23/danpy/issues"
 "Source Code" = "https://github.com/marcuwynu23/danpy"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=7.0.0",
 ]
@@ -41,3 +42,7 @@ dev = [
 [tool.setuptools]
 py-modules = ["dan"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v"
