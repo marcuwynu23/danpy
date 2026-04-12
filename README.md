@@ -19,16 +19,32 @@ See [FEATURES.md](FEATURES.md) for a complete feature list.
 
 ## Installation
 
+This repo uses **[uv](https://docs.astral.sh/uv/)** for environments and lockfiles (`uv.lock`).
+
 ```bash
-pip install -e .
+# Install uv: https://docs.astral.sh/uv/getting-started/installation/
+uv sync
 ```
 
-Or install from source:
+Editable install from a clone:
 
 ```bash
 git clone https://github.com/marcuwynu23/dan-py.git
 cd dan-py
-pip install -e .
+uv sync
+```
+
+With dev tools (e.g. pytest):
+
+```bash
+uv sync --group dev
+uv run pytest tests/
+```
+
+You can still install from PyPI with pip when a release is published:
+
+```bash
+pip install dan-annotation
 ```
 
 ## Quick Start

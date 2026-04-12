@@ -49,14 +49,18 @@ Use the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.md) wh
    cd dan-py
    ```
 
-2. Install in development mode:
+2. Install the project with **uv** (see [uv installation](https://docs.astral.sh/uv/getting-started/installation/)):
    ```bash
-   pip install -e .
+   uv sync --group dev
    ```
 
 3. Run tests:
    ```bash
-   python -m unittest discover tests -v
+   uv run pytest tests/
+   ```
+   Or with the standard library runner:
+   ```bash
+   uv run python -m unittest discover tests -v
    ```
 
 ## Coding Standards
