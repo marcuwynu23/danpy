@@ -1,5 +1,7 @@
 .secrets
 __pycache__/
+.venv/
 dist/
 build/
 *.egg-info/
+.python-version.local
