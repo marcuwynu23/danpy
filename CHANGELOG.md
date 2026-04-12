@@ -43,6 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Comments**: Support for both hash (#) and double-slash (//) comments
 - **Type Inference**: Automatic detection of booleans, numbers, strings, and arrays
 
-[Unreleased]: https://github.com/yourusername/dan-py/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/yourusername/dan-py/releases/tag/v0.1.0
+[Unreleased]: https://github.com/marcuwynu23/dan-py/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/marcuwynu23/dan-py/releases/tag/v0.1.0
 

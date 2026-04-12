@@ -247,7 +247,7 @@ See the [examples/](examples/) directory for real-world usage scenarios:
 ## Getting Help
 
 - 📖 Check the [README.md](README.md) for basic usage
-- 💬 Ask questions in [Discussions](https://github.com/yourusername/dan-py/discussions)
+- 💬 Ask questions in [Discussions](https://github.com/marcuwynu23/dan-py/discussions)
 - 🐛 Report bugs using the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.md)
 - ✨ Request features using the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.md)
 

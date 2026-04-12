@@ -4,7 +4,7 @@ Thank you for your interest in contributing to DAN Python Library! This document
 
 ## Code of Conduct
 
-This project adheres to a Code of Conduct that all contributors are expected to follow. Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before contributing.
+This project adheres to the [Contributor Covenant](CODE_OF_CONDUCT.md). Please read it before contributing. Optional support: [PayPal](https://paypal.me/wynumarcu23) (see `.github/FUNDING.yml` / **Sponsor** on the repo).
 
 ## How Can I Contribute?
 
@@ -45,7 +45,7 @@ Use the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.md) wh
 
 1. Clone your fork:
    ```bash
-   git clone https://github.com/yourusername/dan-py.git
+   git clone https://github.com/marcuwynu23/dan-py.git
    cd dan-py
    ```
 
@@ -160,7 +160,7 @@ dan-py/
 If you have questions about contributing, feel free to:
 
 - Open a [Question issue](.github/ISSUE_TEMPLATE/question.md)
-- Start a [Discussion](https://github.com/yourusername/dan-py/discussions)
+- Start a [Discussion](https://github.com/marcuwynu23/dan-py/discussions)
 - Contact the maintainers
 
 Thank you for contributing to DAN Python Library! 🎉

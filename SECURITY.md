@@ -1,71 +1,47 @@
-# Security Policy
+# Security policy — DAN Python library
 
-## Supported Versions
+## Supported versions
 
-We actively support and provide security updates for the following versions:
+Security fixes are applied to the supported release line. Prefer the **latest** patch release.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
-| < 0.1   | :x:                |
+| Version   | Supported          |
+| --------- | ------------------ |
+| 0.1.x     | :white_check_mark: |
+| Before 0.1 | :x:              |
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-We take the security of DAN Python Library seriously. If you believe you have found a security vulnerability, please report it to us as described below.
+**Do not** report undisclosed security vulnerabilities through **public GitHub issues**.
 
-### How to Report
+Please report via **[GitHub private vulnerability reporting](https://github.com/marcuwynu23/dan-py/security/advisories/new)** (repository **Security** tab → **Report a vulnerability**).
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+Include:
 
-Instead, please report them via one of the following methods:
+- Description of the vulnerability and potential impact
+- Steps to reproduce
+- Affected versions or commits
+- Optional: suggested fix or mitigation
+- Optional: contact for follow-up questions
 
-1. **Email**: Send an email to [security@example.com] with details about the vulnerability
-2. **GitHub Security Advisory**: Use GitHub's [private vulnerability reporting](https://github.com/yourusername/dan-py/security/advisories/new) feature
+## What to expect
 
-### What to Include
+- **Acknowledgment:** within **48 hours** when possible  
+- **Initial assessment:** within about **7 days**  
+- **Updates** while we investigate and ship a fix  
+- **Public disclosure** coordinated after a fix is available; credit unless you prefer to stay anonymous  
 
-When reporting a vulnerability, please include:
+## Scope
 
-- A description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact of the vulnerability
-- Any suggested fixes or mitigations (if you have them)
-- Your contact information (optional, but helpful for follow-up questions)
+This policy covers the **dan-py** package (Python parser/encoder and published artifacts in this repository).
 
-### What to Expect
+## Safe harbor
 
-- **Acknowledgment**: We will acknowledge receipt of your report within 48 hours
-- **Initial Assessment**: We will provide an initial assessment within 7 days
-- **Updates**: We will keep you informed of our progress
-- **Resolution**: We will work to resolve the issue as quickly as possible
+Good-faith security research that follows this policy (no unnecessary access, no harm to users, prompt reporting) is considered authorized.
 
-### Disclosure Policy
+## Recommendations for users
 
-- We will work with you to understand and resolve the issue quickly
-- We will credit you for the discovery (unless you prefer to remain anonymous)
-- We will not disclose the vulnerability publicly until a fix is available
-- We will coordinate with you on the timing of any public disclosure
+- Treat parsed DAN as **untrusted** until validated for your domain.
+- Apply **size limits** and resource bounds for network-supplied documents.
+- **Upgrade** when security releases are published; see [CHANGELOG.md](CHANGELOG.md).
 
-### Security Best Practices
-
-When using DAN Python Library:
-
-1. **Keep dependencies updated**: Regularly update to the latest version
-2. **Validate input**: Always validate and sanitize input data before processing
-3. **Use in trusted environments**: Be cautious when parsing untrusted DAN files
-4. **Review examples**: Check the examples directory for best practices
-
-### Known Security Considerations
-
-- **Input Validation**: The library parses text input. Always validate input from untrusted sources
-- **Resource Limits**: Large DAN files may consume significant memory. Consider implementing size limits for untrusted input
-- **Type Coercion**: The parser performs automatic type conversion. Be aware of potential type confusion issues
-
-### Security Updates
-
-Security updates will be released as patch versions (e.g., 0.1.1, 0.1.2) and will be documented in the [CHANGELOG.md](CHANGELOG.md).
-
-## Thank You
-
-Thank you for helping keep DAN Python Library and its users safe!
-
+Thank you for helping keep users safe.

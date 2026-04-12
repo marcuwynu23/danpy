@@ -26,7 +26,7 @@ pip install -e .
 Or install from source:
 
 ```bash
-git clone https://github.com/yourusername/dan-py.git
+git clone https://github.com/marcuwynu23/dan-py.git
 cd dan-py
 pip install -e .
 ```
@@ -127,11 +127,12 @@ pytest tests/
 - [FEATURES.md](FEATURES.md) - Complete feature documentation
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Guidelines for contributing
 - [CHANGELOG.md](CHANGELOG.md) - Version history and changes
+- [SECURITY.md](SECURITY.md) - Responsible vulnerability disclosure
 - [examples/README.md](examples/README.md) - Example files documentation
 
 ## Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Optional support: [PayPal](https://paypal.me/wynumarcu23) or the repository **Sponsor** button (`.github/FUNDING.yml`).
 
 ## License
 
@@ -143,7 +144,7 @@ Please report security vulnerabilities to the maintainers. See [SECURITY.md](SEC
 
 ## Support
 
-- 📖 [Documentation](https://github.com/yourusername/dan-py#readme)
-- 🐛 [Issue Tracker](https://github.com/yourusername/dan-py/issues)
-- 💬 [Discussions](https://github.com/yourusername/dan-py/discussions)
+- 📖 [Documentation](https://github.com/marcuwynu23/dan-py#readme)
+- 🐛 [Issue Tracker](https://github.com/marcuwynu23/dan-py/issues)
+- 💬 [Discussions](https://github.com/marcuwynu23/dan-py/discussions)
 
