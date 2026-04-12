@@ -1,12 +1,13 @@
 name: Publish to PyPI
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to publish (e.g., 1.2.0)"
+        description: "Optional note (version comes from pyproject.toml / tag)"
         required: false
         type: string
 
