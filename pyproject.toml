@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dan-annotation"
-version = "0.1.0"
+version = "1.0.0"
 description = "DAN (Data Advanced Notation) Parser and Encoder for Python"
 readme = "README.md"
 license = "MIT"
